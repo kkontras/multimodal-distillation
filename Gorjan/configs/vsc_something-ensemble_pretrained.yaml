@@ -1,0 +1,30 @@
+TRAIN_DATASET_PATH: /scratch/leuven/350/vsc35057/data/SthSth/something_something_detections/train_dataset_flow_aligned.json
+VAL_DATASET_PATH: /scratch/leuven/350/vsc35057/data/SthSth/something_something_detections/val_dataset_flow_aligned.json
+TRAIN_DATASET_NAME: something-something
+VAL_DATASET_NAME: something-something
+LABELS_PATH: /scratch/leuven/350/vsc35057/data/SthSth/something-something-v2-labels.json
+VIDEOS_PATH: /scratch/leuven/350/vsc35057/data/SthSth/dataset.hdf5
+FLOW_PATH: /scratch/leuven/350/vsc35057/data/SthSth/flow_dataset.hdf5
+EXPERIMENT_PATH: /scratch/leuven/350/vsc35057/models/SthSth_models/something-swin
+VIDEO_PRETRAINED_PATH: /scratch/leuven/350/vsc35057/models/SthSth_models/gorjan_experiments/unimodal_video/model_checkpoint.pt
+FLOW_PRETRAINED_PATH: /scratch/leuven/350/vsc35057/models/SthSth_models/gorjan_experiments/unimodal_flow/model_checkpoint.pt
+LAYOUT_PRETRAINED_PATH: /scratch/leuven/350/vsc35057/models/SthSth_models/gorjan_experiments/unimodal_layout/model_checkpoint.pt
+DATASET_TYPE: video_layout_flow
+TOTAL_ACTIONS: 
+  ACTION: 174
+ACTION_WEIGHTS: 
+  ACTION: 1.0
+AUGMENTATIONS:
+  VIDEO: ["VideoResize", "VideoRandomCrop", "VideoColorJitter"]
+  FLOW: ["VideoResize", "VideoRandomCrop"]
+NUM_WORKERS: 5
+MODEL_NAME: all3
+BACKBONE_MODEL_PATH: /scratch/leuven/350/vsc35057/data/SthSth/swin_pretraining_kinetikcs400_1k.pth
+BATCH_SIZE: 6
+FRAME_UNIFORM: True
+NUM_FRAMES: 16
+WEIGHT_DECAY: 0.02
+LEARNING_RATE: 0.0001
+EPOCHS: 30
+WARMUP_EPOCHS: 3
+WARM_RESTART: False
