@@ -183,11 +183,12 @@ class Stlt(nn.Module):
             }
         )
 
-    def forward(self, batch: Dict[str, torch.Tensor]):
+    def forward(self, batch: Dict[str, torch.Tensor], return_features: bool = False):
         output = {}
         # Get features
         features = self.temporal_transformer(batch)
         for actions_name in self.classifiers.keys():
             output[actions_name] = self.classifiers[actions_name](features)
-
+        if return_features:
+            return output, features
         return output

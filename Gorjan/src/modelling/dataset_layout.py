@@ -23,7 +23,7 @@ class LayoutDataset(ProtoDataset):
         self.create_dataset()
         self.cat2index = {"pad": 0, "object": 1, "hand": 2}
         self.max_objects = 14
-        self.sampler = get_sampler[self.cfg.MODEL_NAME](cfg=cfg, train=train)
+        self.sampler = get_sampler["stlt"](cfg=cfg, train=train)
 
     def open_videos(self):
         raise AttributeError("Layout dataset does not use videos.")

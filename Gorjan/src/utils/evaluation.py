@@ -5,7 +5,6 @@ import numpy as np
 import torch
 from yacs.config import CfgNode
 
-
 class EvaluatorAccuracy:
     def __init__(self, total_instances: int):
         self.total_instances = total_instances
@@ -26,15 +25,29 @@ class EvaluatorAccuracy:
         }
         self.processed_instances = 0
 
-    def process(self, logits: torch.Tensor, labels: torch.Tensor):
-        assert (
-            len(logits.shape) == 3
-        ), "The shape of logits must be in format [bs, num_test_clips * num_test_crops, total_classes]"
+    def process(self, logits: torch.Tensor, labels: torch.Tensor ):
+        # print("In process")
+        # print(logits.shape)
+        # print(labels.shape)
+        assert (len(logits.shape) == 3), "The shape of logits must be in format [bs, num_test_clips * num_test_crops, total_classes]"
         num_instances = logits.shape[0]
         logits = logits.mean(1)
+        # print((logits.argmax(-1) == labels)[0:3])
+
         self.data["top1_corr"][
             self.processed_instances : self.processed_instances + num_instances
         ] = (logits.argmax(-1) == labels).int()
+        self.data["top5_corr"][
+            self.processed_instances : self.processed_instances + num_instances
+        ] = ((logits.topk(k=5).indices == labels.unsqueeze(1)).any(dim=1)).int()
+        self.processed_instances += num_instances
+    def process_linear_prob(self, logits: torch.Tensor, labels: torch.Tensor ):
+
+
+        num_instances = logits.shape[0]
+        self.data["top1_corr"][
+            self.processed_instances : self.processed_instances + num_instances
+        ] = (logits == labels).int()
         self.data["top5_corr"][
             self.processed_instances : self.processed_instances + num_instances
         ] = ((logits.topk(k=5).indices == labels.unsqueeze(1)).any(dim=1)).int()

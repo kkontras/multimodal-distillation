@@ -19,6 +19,7 @@ spatial_sizes = {
     "resnet3d": 224,  # HACK, because we resize inside the model to 112
     "video_mae": 224,
     "swin": 224,
+    "all3": 224,
 }
 
 

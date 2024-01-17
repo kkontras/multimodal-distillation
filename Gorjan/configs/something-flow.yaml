@@ -1,20 +1,19 @@
-TRAIN_DATASET_PATH: /esat/smcdata/users/kkontras/Image_Dataset/no_backup/Sth-Sth/something_something_detections/kkontras_video_train.json
-VAL_DATASET_PATH: /esat/smcdata/users/kkontras/Image_Dataset/no_backup/Sth-Sth/something_something_detections/kkontras_video_val.json
+TRAIN_DATASET_PATH: /esat/smcdata/users/kkontras/Image_Dataset/no_backup/Sth-Sth/something_something_detections/kkontras_flow_train.json
+VAL_DATASET_PATH: /esat/smcdata/users/kkontras/Image_Dataset/no_backup/Sth-Sth/something_something_detections/kkontras_flow_val.json
 TRAIN_DATASET_NAME: something-something
 VAL_DATASET_NAME: something-something
 LABELS_PATH: /esat/smcdata/users/kkontras/Image_Dataset/no_backup/Sth-Sth/something-something-v2-labels.json
-VIDEOS_PATH: /esat/smcdata/users/kkontras/Image_Dataset/no_backup/Sth-Sth/dataset.hdf5
-EXPERIMENT_PATH: /esat/smcdata/users/kkontras/Image_Dataset/no_backup/data/2023_data/SthSth/something-swin
+VIDEOS_PATH: /esat/smcdata/users/kkontras/Image_Dataset/no_backup/Sth-Sth/flow_dataset.hdf5
+EXPERIMENT_PATH: /esat/smcdata/users/kkontras/Image_Dataset/no_backup/data/2023_data/SthSth/unimodal_flow
 DATASET_TYPE: video
 TOTAL_ACTIONS: 
   ACTION: 174
 ACTION_WEIGHTS: 
   ACTION: 1.0
 AUGMENTATIONS:
-  VIDEO: ["VideoResize", "VideoRandomCrop", "VideoColorJitter"]
+  FLOW: [ "VideoResize", "VideoRandomCrop" ]
 NUM_WORKERS: 5
 MODEL_NAME: swin
-BACKBONE_MODEL_PATH: /esat/smcdata/users/kkontras/Image_Dataset/no_backup/Sth-Sth/swin_pretraining_kinetikcs400_1k.pth
 BATCH_SIZE: 16
 FRAME_UNIFORM: True
 NUM_FRAMES: 16

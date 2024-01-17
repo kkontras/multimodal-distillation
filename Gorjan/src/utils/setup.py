@@ -6,6 +6,8 @@ from yacs.config import CfgNode as CN
 
 _C = CN()
 # Warm restarting training
+_C.SEED = 19
+
 _C.WARM_RESTART = False
 # Whether to log to a file
 _C.LOG_TO_FILE = False
@@ -75,10 +77,15 @@ _C.WARMUP_EPOCHS = 2
 _C.BACKBONE_MODEL_PATH = None
 # Path to existing checkpoint
 _C.CHECKPOINT_PATH = None
+
+_C.VIDEO_PRETRAINED_PATH = None
+_C.FLOW_PRETRAINED_PATH = None
+_C.LAYOUT_PRETRAINED_PATH = None
 # Device used for training: Cuda or Cpu
 _C.DEVICE = "cuda"
 # Where to save the experiment
 _C.EXPERIMENT_PATH = "experiments/default"
+_C.LOAD_EXPERIMENT = False
 # Whether to freeze the backbone during training
 _C.FREEZE_BACKBONE = False
 # Number of testing clips when evaluating

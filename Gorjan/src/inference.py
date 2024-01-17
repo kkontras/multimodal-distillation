@@ -68,7 +68,7 @@ def inference(cfg: CfgNode):
     model.train(False)
     evaluator.reset()
     # Inference
-    for batch in tqdm(val_loader, disable=not accelerator.is_main_process):
+    for step, batch in tqdm(enumerate(val_loader), disable=not accelerator.is_main_process):
         # Obtain outputs: [b * n_clips, n_actions]
         model_output = model(batch)
         # Gather
@@ -89,6 +89,9 @@ def inference(cfg: CfgNode):
         # Evaluate
         evaluator.process(all_outputs, all_labels)
         calibration_evaluator.process(all_outputs, all_labels)
+        if step == 200:
+            break
+
     # Metrics
     if accelerator.is_main_process:
         metrics = evaluator.evaluate_verbose()
@@ -110,10 +113,12 @@ def main():
     args = parser.parse_args()
     cfg = get_cfg_defaults()
     cfg.merge_from_file(pjoin(args.experiment_path, "config.yaml"))
+    # cfg.merge_from_file(args.experiment_path)
     if args.opts:
         cfg.merge_from_list(args.opts)
     # Set backbone_model_path to None as not important
     cfg.BACKBONE_MODEL_PATH = None
+    cfg.BATCH_SIZE = 16
     # Freeze the config
     cfg.freeze()
     inference(cfg)

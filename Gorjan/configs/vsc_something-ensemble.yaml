@@ -5,7 +5,7 @@ VAL_DATASET_NAME: something-something
 LABELS_PATH: /scratch/leuven/350/vsc35057/data/SthSth/something-something-v2-labels.json
 VIDEOS_PATH: /scratch/leuven/350/vsc35057/data/SthSth/dataset.hdf5
 FLOW_PATH: /scratch/leuven/350/vsc35057/data/SthSth/flow_dataset.hdf5
-EXPERIMENT_PATH: /scratch/leuven/350/vsc35057/models/SthSth_models/something-swin
+EXPERIMENT_PATH: /scratch/leuven/350/vsc35057/models/SthSth_models/ensemble
 DATASET_TYPE: video_layout_flow
 TOTAL_ACTIONS: 
   ACTION: 174

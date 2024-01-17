@@ -5,7 +5,7 @@ VAL_DATASET_NAME: something-something
 LABELS_PATH: /scratch/leuven/350/vsc35057/data/SthSth/something-something-v2-labels.json
 VIDEOS_PATH: /scratch/leuven/350/vsc35057/data/SthSth/dataset.hdf5
 FLOW_PATH: /scratch/leuven/350/vsc35057/data/SthSth/flow_dataset.hdf5
-EXPERIMENT_PATH: /scratch/leuven/350/vsc35057/models/SthSth_models/something-swin
+EXPERIMENT_PATH: /scratch/leuven/350/vsc35057/models/SthSth_models/ensemble_pretrained
 VIDEO_PRETRAINED_PATH: /scratch/leuven/350/vsc35057/models/SthSth_models/gorjan_experiments/unimodal_video/model_checkpoint.pt
 FLOW_PRETRAINED_PATH: /scratch/leuven/350/vsc35057/models/SthSth_models/gorjan_experiments/unimodal_flow/model_checkpoint.pt
 LAYOUT_PRETRAINED_PATH: /scratch/leuven/350/vsc35057/models/SthSth_models/gorjan_experiments/unimodal_layout/model_checkpoint.pt

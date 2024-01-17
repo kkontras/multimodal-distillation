@@ -22,7 +22,7 @@ class VideoDataset(ProtoDataset):
         )
         self.dataset_type = self.cfg.DATASET_TYPE
         self.create_dataset()
-        self.sampler = get_sampler[self.cfg.MODEL_NAME](cfg=cfg, train=train)
+        self.sampler = get_sampler["swin"](cfg=cfg, train=train)
 
     def get_video_frames(self, **kwargs):
         indices = kwargs.pop("indices")

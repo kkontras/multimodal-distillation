@@ -10,6 +10,7 @@ from modelling.hand_models import Stlt
 from modelling.resnets3d import generate_model
 from modelling.swin import SwinTransformer3D
 from utils.data_utils import get_normalizer
+import copy
 
 
 class R3d(nn.Module):
@@ -158,7 +159,7 @@ class SwinModel(nn.Module):
 
         return mapping[self.cfg.DATASET_TYPE]
 
-    def forward(self, batch: Dict[str, torch.Tensor]):
+    def forward(self, batch: Dict[str, torch.Tensor], return_features: bool=False):
         # Obtain the modality
         modality = self.get_modality()
         # Get the video frames and prepare
@@ -176,12 +177,65 @@ class SwinModel(nn.Module):
         # Classify
         for actions_name in self.classifiers.keys():
             output[actions_name] = self.classifiers[actions_name](features)
-
+        if return_features:
+            return output, features
         return output
 
+class All3Model(nn.Module):
+    def __init__(self, cfg: CfgNode):
+        super(All3Model, self).__init__()
+        self.cfg = copy.deepcopy(cfg)
+
+        # self.cfg.TRAIN_DATASET_PATH = "/esat/smcdata/users/kkontras/Image_Dataset/no_backup/Sth-Sth/something_something_detections/kkontras_flow_train.json"
+        # self.cfg.VAL_DATASET_PATH = "/esat/smcdata/users/kkontras/Image_Dataset/no_backup/Sth-Sth/something_something_detections/kkontras_flow_val.json"
+        self.cfg.defrost()
+        self.cfg.CHECKPOINT_PATH =  cfg.VIDEO_PRETRAINED_PATH if "VIDEO_PRETRAINED_PATH" in cfg else None
+        self.cfg.freeze()
+
+        self.video_model = SwinModel(cfg=self.cfg)
+        self.cfg.defrost()
+        self.cfg.BACKBONE_MODEL_PATH = None
+        self.cfg.CHECKPOINT_PATH = cfg.FLOW_PRETRAINED_PATH if "FLOW_PRETRAINED_PATH" in cfg else None
+        self.cfg.freeze()
+
+        self.flow_model = SwinModel(cfg=self.cfg)
+
+        self.cfg.defrost()
+        self.cfg.BACKBONE_MODEL_PATH = None
+        self.cfg.CHECKPOINT_PATH = cfg.LAYOUT_PRETRAINED_PATH if "LAYOUT_PRETRAINED_PATH" in cfg else None
+        self.cfg.freeze()
+
+        self.layout_model = Stlt(cfg=self.cfg)
+
+        self.classifier = nn.Linear(768*3,174)
+
+        if cfg.CHECKPOINT_PATH:
+            print("We are loading from {}".format(cfg.CHECKPOINT_PATH))
+            self.load_state_dict(torch.load(cfg.CHECKPOINT_PATH, map_location="cpu"))
+
+
+    def forward(self, batch: Dict[str, torch.Tensor], return_features: bool = False):
+        video_output, video_features = self.video_model(batch, return_features=True)
+        flow_output, flow_features = self.flow_model(batch, return_features=True)
+        layout_output, layout_features = self.layout_model(batch, return_features=True)
+
+        # print(video_features.shape)
+        # print(flow_features.shape)
+        # print(layout_features.shape)
+
+        pred = self.classifier( torch.cat([video_features, flow_features, layout_features], dim=1))
+
+        # print(flow_output.keys())
+        # print(layout_output.keys())
+
+        # output = {"ACTION": (video_output["ACTION"] + flow_output["ACTION"] + layout_output["ACTION"])/3}
+        if return_features:
+            return {"ACTION": pred, "features":{"video":video_features, "flow":flow_features, "layout":layout_features}}
+        return {"ACTION": pred}
 
 model_factory = {
     "resnet3d": R3d,
     "stlt": Stlt,
     "swin": SwinModel,
+    "all3": All3Model,
 }
